@@ -12,7 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('players', function (Blueprint $table) {
-            $table->id();
+            $table->foreignId('user_id')->constrained('users')->primary();
+            $table->integer('ranking');
+            $table->integer('height');
+            $table->enum('playing_hand', ['left', 'right']);
+            $table->enum('backhand_style', ['one hand', 'two hands', 'both hands']);
+            $table->text('briefing');
             $table->timestamps();
         });
     }
