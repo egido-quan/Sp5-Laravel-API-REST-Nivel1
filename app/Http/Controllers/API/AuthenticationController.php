@@ -28,19 +28,31 @@ class AuthenticationController extends Controller
             {
                 $accessToken = $user->createToken($user->email)->accessToken;
                 
-                $data = [];
-                $data['response_code'] = '200';
-                $data['message']       = 'Success Login';
-                $data['user_info']     = $user;
-                $data['token']         = $accessToken;
-                return response()->json($data);
+                $response = [];
+                $response['response_code'] = '200';
+                $response['message']       = 'Success Login';
+                $response['user_info']     = $user;
+                $response['token']         = $accessToken;
+                return response()->json($response);
             } else {
-                $data = [];
-                $data['response_code']  = '401';
-                $data['message']        = 'Unauthorized';
-                return response()->json($data);
+                $response = [];
+                $response['response_code']  = '401';
+                $response['message']        = 'Unauthorized';
+                return response()->json($response);
             }
     
     } 
+
+    public function logout (Request $request) {
+        $request->user()->token()->revoke();
+
+        $response = [];
+        $response['response_code']  = '200';
+        $response['message']        = 'Success logout';
+        return response()->json($response);
+
+    }
+
 }
+
 

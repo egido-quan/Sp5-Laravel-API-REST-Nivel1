@@ -54,7 +54,22 @@ class AuthenticationTest extends TestCase
         $this->assertEquals($responseJson['message'], 'Unauthorized');
     }
 
+    /** @test */
     public function logout_is_working() {
 
+        $this->withoutExceptionHandling();
+
+        $user = User::where('email', "andrei@rublev")->first();
+        $userToken = $user->createToken('logout')->accessToken;
+        $response = $this->post('/api/logout', 
+            [], 
+            ['Authorization' => 'Bearer ' . $userToken,]
+        );
+
+        $response->assertOk();
+
+        $responseJson = $response->json();
+        $this->assertEquals($responseJson['response_code'], '200');
+        $this->assertEquals($responseJson['message'], 'Success logout');
     }
 }

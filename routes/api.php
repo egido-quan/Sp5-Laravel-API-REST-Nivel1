@@ -10,3 +10,4 @@ use App\Http\Controllers\API\AuthenticationController;
 })->middleware('auth:api');*/
 
 Route::post('/login', [AuthenticationController::class, 'login']);
+Route::post('/logout', [AuthenticationController::class, 'logout'])->middleware('auth:api');
