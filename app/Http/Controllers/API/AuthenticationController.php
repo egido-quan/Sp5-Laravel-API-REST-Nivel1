@@ -48,6 +48,7 @@ class AuthenticationController extends Controller
 
         $response = [];
         $response['response_code']  = '200';
+        $response['user']        = $request->user()->email;
         $response['message']        = 'Success logout';
         return response()->json($response);
 

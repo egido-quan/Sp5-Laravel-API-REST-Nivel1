@@ -21,7 +21,7 @@ class AuthenticationTest extends TestCase
     */
 
     /** @test */
-    public function login_is_working() {
+    public function user_can_login() {
 
         $this->withoutExceptionHandling();
 
@@ -55,7 +55,7 @@ class AuthenticationTest extends TestCase
     }
 
     /** @test */
-    public function logout_is_working() {
+    public function user_can_logout() {
 
         $this->withoutExceptionHandling();
 

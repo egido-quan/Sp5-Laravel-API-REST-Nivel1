@@ -13,3 +13,4 @@ use App\Http\Controllers\API\RegistrationController;
 Route::post('/login', [AuthenticationController::class, 'login']);
 Route::post('/logout', [AuthenticationController::class, 'logout'])->middleware('auth:api');
 Route::post('/register_user', [RegistrationController::class, 'register'])->middleware(['auth:api', 'role:admin']);
+Route::post('/delete_user', [RegistrationController::class, 'delete'])->middleware(['auth:api', 'role:admin']);
