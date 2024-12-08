@@ -25,6 +25,9 @@ class RegistrationTest extends TestCase
 
         $this->withoutExceptionHandling();
 
+        $user = User::where('email', "admin@admin")->first();
+        $userToken = $user->createToken('admin')->accessToken;
+
         $response = $this->post('/api/register_user',
         [
             'name' => 'Bjorn',
@@ -32,6 +35,9 @@ class RegistrationTest extends TestCase
             'email' => 'bjorn@borg',
             'password' => 'xxx',
             'role' => 'admin'
+        ],
+        [
+            'Authorization' => 'Bearer ' . $userToken
         ]);
 
         $response->assertOk();
@@ -48,6 +54,4 @@ class RegistrationTest extends TestCase
         $this->assertEquals($user->getRoleNames()->first(), 'admin');
 
     }
-
-    
 }
