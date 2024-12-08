@@ -21,7 +21,6 @@ class UserSeeder extends Seeder
         $user->email = $user->name . "@" . $user->surname;
         $user->password = "admin";
 
-        //$user->assignRole('admin');
         $user->save();
 
 
@@ -32,7 +31,6 @@ class UserSeeder extends Seeder
         $user->email = $user->name . "@" . $user->surname;
         $user->password = "xxx";
 
-        //$user->assignRole('player');
         $user->save();
 
 
@@ -43,7 +41,6 @@ class UserSeeder extends Seeder
         $user->email = $user->name . "@" . $user->surname;
         $user->password = "xxx";
 
-        //$user->assignRole('player');
         $user->save();
 
 
@@ -54,7 +51,6 @@ class UserSeeder extends Seeder
         $user->email = $user->name . "@" . $user->surname;
         $user->password = "xxx";
 
-        //$user->assignRole('player');
         $user->save();
 
 
@@ -65,7 +61,6 @@ class UserSeeder extends Seeder
         $user->email = $user->name . "@" . $user->surname;
         $user->password = "xxx";
 
-        //$user->assignRole('player');
         $user->save();
 
 
@@ -76,7 +71,6 @@ class UserSeeder extends Seeder
         $user->email = $user->name . "@" . $user->surname;
         $user->password = "xxx";
 
-        //$user->assignRole('player');
         $user->save();
 
 
@@ -87,7 +81,6 @@ class UserSeeder extends Seeder
         $user->email = $user->name . "@" . $user->surname;
         $user->password = "xxx";
 
-        //$user->assignRole('player');
         $user->save();
 
         
@@ -98,7 +91,6 @@ class UserSeeder extends Seeder
         $user->email = $user->name . "@" . $user->surname;
         $user->password = "xxx";
 
-        //$user->assignRole('player');
         $user->save();
     }
 }
