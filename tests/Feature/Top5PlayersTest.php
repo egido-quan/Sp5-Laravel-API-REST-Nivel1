@@ -25,6 +25,8 @@ class Top5PlayersTest extends TestCase
 
         $responseJson = $response->json();
         $this->assertCount(5,$responseJson['list'], 5);
+        $this->assertEquals($responseJson['list'][0][0], 1);
+        $this->assertEquals($responseJson['list'][4][0], 5);
         $this->assertEquals($responseJson['response_code'], '200');
         $this->assertEquals($responseJson['message'], 'List delivered');
 
