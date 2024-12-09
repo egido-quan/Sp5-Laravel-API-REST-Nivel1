@@ -17,3 +17,4 @@ Route::post('/register_user', [RegistrationController::class, 'register'])->midd
 Route::post('/delete_user', [RegistrationController::class, 'delete'])->middleware(['auth:api', 'role:admin']);
 
 Route::get('/top5_players', [PlayerController::class, 'top5Players'])->middleware('auth:api');
+Route::post('/player_info', [PlayerController::class, 'playerInfo'])->middleware('auth:api');
