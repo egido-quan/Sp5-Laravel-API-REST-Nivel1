@@ -15,8 +15,16 @@ class PlayerController extends Controller
             ->with('user')
             ->take(5)
             ->get();
+            $players_slim = [];
+        foreach ($players as $player) {
+            $ranking = $player['ranking'];
+            $name = $player['user']['name'];
+            $surname = $player['user']['surname'];
+            $players_slim [] = [$ranking, $name, $surname];
+
+        }
         $response = [];
-        $response['list'] = $players;
+        $response['list'] = $players_slim;
         $response['response_code'] = '200';
         $response['message']       = 'List delivered';
         return response()->json($response);
