@@ -17,8 +17,8 @@ class PlayerInfoTest extends TestCase
 
         $user = User::where('email', "jannik@sinner")->first();
         $userToken = $user->createToken('user')->accessToken;
-        $response = $this->post('api/player_info', 
-            ['ranking' => 2],
+        $response = $this->post('api/player_info/2', 
+            [],
             ['Authorization' => 'Bearer ' . $userToken]
         );
 

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
-class RegistrationController extends Controller
+class UserController extends Controller
 {
     public function register(Request $request) {        
         try {
@@ -71,6 +71,45 @@ class RegistrationController extends Controller
             $data['message']        = 'Unknown user';
             return response()->json($data);            
         }
+    }
+
+    public function editUser(Request $request, int $id) {
+
+        try {
+            $request->validate([
+                'name'      => 'required|min:4',
+                'surname'   => 'required|min:4',
+                'email'     => 'required|string|email|max:255|unique:users',
+                'password'  => 'required|min:3',
+                'role'      => 'required|string|in:admin,user'
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'response_code' => 422,
+                'status'        => 'error',
+                'message'       => 'Validation failed',
+                'errors'        => $e->errors()
+            ], 422);
+        }
+
+        $userToEdit = User::find($id);
+
+        $userToEdit->name       = $request->name;
+        $userToEdit->surname    = $request->surname;
+        $userToEdit->email      = $request->email;
+        $userToEdit->password   = Hash::make($request->password);
+        $userToEdit->assignRole($request->role);
+
+        $userToEdit->save();
+
+        $data = [];
+        $data['response_code']  = '200';
+        $data['status']         = 'success';
+        $data['message']        = 'User data modification successful';
+        return response()->json($data);
+
+
+
     }
 
 }

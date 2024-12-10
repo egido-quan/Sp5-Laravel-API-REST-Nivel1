@@ -18,9 +18,11 @@ class Player extends Model
     ];
     
     protected $table = 'players';  
+    protected $primaryKey = 'user_id';
+    public $incrementing = false;
 
     public function user() {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
 }
