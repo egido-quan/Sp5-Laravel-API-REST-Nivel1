@@ -25,4 +25,14 @@ class Player extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function challengesPlayer1()
+    {
+        return $this->hasMany(Challenge::class, 'player1_user_id');
+    }
+
+    public function challengesPlayer2()
+    {
+        return $this->hasMany(Challenge::class, 'player2_user_id');
+    }
+
 }
