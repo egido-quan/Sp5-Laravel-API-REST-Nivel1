@@ -21,3 +21,5 @@ Route::get('/top5_players', [PlayerController::class, 'top5Players'])->middlewar
 Route::post('/player_info/{ranking}', [PlayerController::class, 'playerInfo'])->middleware('auth:api');
 Route::post('/register_player', [PlayerController::class, 'registerPlayer'])->middleware(['auth:api', 'role:admin']);
 Route::put('/edit_player/{id}', [PlayerController::class, 'editPlayer'])->middleware(['auth:api', 'role:admin']);
+
+Route::post('/register_challenge', [ChallengeController::class, 'registerChallenge'])->middleware(['auth:api', 'role:admin']);
