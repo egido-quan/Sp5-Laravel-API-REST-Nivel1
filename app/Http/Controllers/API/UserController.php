@@ -75,13 +75,13 @@ class UserController extends Controller
 
     public function editUser(Request $request, int $id) {
 
-        try {
+         try {
             $request->validate([
-                'name'      => 'required|min:4',
-                'surname'   => 'required|min:4',
-                'email'     => 'required|string|email|max:255|unique:users',
-                'password'  => 'required|min:3',
-                'role'      => 'required|string|in:admin,user'
+                'name'      => 'min:4',
+                'surname'   => 'min:4',
+                'email'     => 'string|email|max:255|unique:users',
+                'password'  => 'min:3',
+                'role'      => 'string|in:admin,user'
             ]);
         } catch (ValidationException $e) {
             return response()->json([
@@ -92,13 +92,20 @@ class UserController extends Controller
             ], 422);
         }
 
-        $userToEdit = User::find($id);
 
-        $userToEdit->name       = $request->name;
-        $userToEdit->surname    = $request->surname;
-        $userToEdit->email      = $request->email;
-        $userToEdit->password   = Hash::make($request->password);
-        $userToEdit->assignRole($request->role);
+
+        $userToEdit = User::find($id);
+        $userToEdit->name = ($request->name == "") ? $userToEdit->name : $request->name;
+        $userToEdit->surname = ($request->surname == "") ? $userToEdit->surname : $request->surname;
+        $userToEdit->email = ($request->email == "") ? $userToEdit->email : $request->email;
+        $userToEdit->password = ($request->password == "") ? $userToEdit->password : Hash::make($request->password);
+        if (!$request->role == "") $userToEdit->assignRole($request->role);
+
+        //$userToEdit->name       = $request->name;
+        //$userToEdit->surname    = $request->surname;
+        //$userToEdit->email      = $request->email;
+        //$userToEdit->password   = Hash::make($request->password);
+        //$userToEdit->assignRole($request->role);
 
         $userToEdit->save();
 

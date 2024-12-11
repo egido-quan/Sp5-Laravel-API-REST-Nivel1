@@ -131,14 +131,14 @@ class PlayerController extends Controller
 
         try {
             $request->validate([
-                'name'              => 'required|min:4',
-                'surname'           => 'required|min:4',
-                'email'             => 'required|string|email|max:255|unique:users',
-                'password'          => 'required|min:3',
-                'height'            => 'required|integer|min:1',
-                'playing_hand'      => 'required|string|in:left,right,both',
-                'backhand_style'    => 'required|string|in:"one hand","two hands"',
-                'briefing'          => 'required|string'
+                'name'              => 'min:4',
+                'surname'           => 'min:4',
+                'email'             => 'string|email|max:255|unique:users',
+                'password'          => 'min:3',
+                'height'            => 'integer|min:1',
+                'playing_hand'      => 'string|in:left,right,both',
+                'backhand_style'    => 'string|in:"one hand","two hands"',
+                'briefing'          => 'string'
             ]);
 
         } catch (ValidationException $e) {
@@ -152,19 +152,25 @@ class PlayerController extends Controller
 
 
         $userToEdit = User::find($id);
-        $userToEdit->name       = $request->name;
-        $userToEdit->surname    = $request->surname;
-        $userToEdit->email      = $request->email;
-        $userToEdit->password   = Hash::make($request->password);
+        $userToEdit->name = ($request->name == "") ? $userToEdit->name : $request->name;
+        $userToEdit->surname = ($request->surname == "") ? $userToEdit->surname : $request->surname;
+        $userToEdit->email = ($request->email == "") ? $userToEdit->email : $request->email;
+        $userToEdit->password = ($request->password == "") ? $userToEdit->password : Hash::make($request->password);
+
         $userToEdit->save();
 
         
         $playerToEdit = Player::where('user_id', $id)->first();
         
-        $playerToEdit->height           = $request->height;
-        $playerToEdit->playing_hand     = $request->playing_hand;
-        $playerToEdit->backhand_style   = $request->backhand_style;
-        $playerToEdit->briefing         = $request->briefing;
+        //$playerToEdit->height           = $request->height;
+        $playerToEdit->height = ($request->height == "") ? $playerToEdit->height : $request->height;
+        //$playerToEdit->playing_hand     = $request->playing_hand;
+        $playerToEdit->playing_hand = ($request->playing_hand == "") ? $playerToEdit->playing_hand : $request->playing_hand;
+        //$playerToEdit->backhand_style   = $request->backhand_style;
+        $playerToEdit->backhand_style = ($request->backhand_style == "") ? $playerToEdit->backhand_style : $request->backhand_style;
+        //$playerToEdit->briefing         = $request->briefing;
+        $playerToEdit->briefing = ($request->briefing == "") ? $playerToEdit->briefing : $request->briefing;
+
         $playerToEdit->save();
 
         $data = [];
