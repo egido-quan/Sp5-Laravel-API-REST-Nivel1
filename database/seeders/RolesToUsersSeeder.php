@@ -16,28 +16,31 @@ class RolesToUsersSeeder extends Seeder
     public function run(): void
     {
         $user = User::where('email', 'admin@admin')->first();
-        $user->assignRole('admin');
+        $user->assignRole([
+            Role::findByName('admin', 'api'),
+            Role::findByName('user', 'api'),
+        ]);
 
         $user = User::where('email', 'jannik@sinner')->first();
-        $user->assignRole('user');
+        $user->assignRole(Role::findByName('user', 'api'));
 
         $user = User::where('email', 'daniil@medvedev')->first();
-        $user->assignRole('user');
+        $user->assignRole(Role::findByName('user', 'api'));
 
         $user = User::where('email', 'novak@djokovic')->first();
-        $user->assignRole('user');
+        $user->assignRole(Role::findByName('user', 'api'));
 
         $user = User::where('email', 'andrei@rublev')->first();
-        $user->assignRole('user');
+        $user->assignRole(Role::findByName('user', 'api'));
 
         $user = User::where('email', 'alexander@zverev')->first();
-        $user->assignRole('user');
+        $user->assignRole(Role::findByName('user', 'api'));
 
         $user = User::where('email', 'jack@draper')->first();
-        $user->assignRole('user');
+        $user->assignRole(Role::findByName('user', 'api'));
 
         $user = User::where('email', 'lorenzo@musetti')->first();
-        $user->assignRole('user');
+        $user->assignRole(Role::findByName('user', 'api'));
 
 
     }
