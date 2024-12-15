@@ -4,33 +4,29 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 use App\Models\User;
+use Spatie\Permission\Models\Role;
 
 class AuthenticationTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     */
-    /*public function test_example(): void
-    {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
-    }
-    */
 
     /** @test */
     public function user_can_login() {
 
         $this->withoutExceptionHandling();
 
-        $user = User::where('email', "jannik@sinner")->first();
+        $password = fake()->password();
+        $user = User::factory()->create([
+            'password' => Hash::make($password)
+        ]);
+        $user->assignRole(Role::findByName('user', 'api'));
 
         $response = $this->post('/api/login',
         [
             'email' => $user->email,
-            'password' => 'xxx'
+            'password' => $password
         ]);
 
         $response->assertOk();
@@ -52,6 +48,8 @@ class AuthenticationTest extends TestCase
         $responseJson = $response->json();
         $this->assertEquals($responseJson['response_code'], '401');
         $this->assertEquals($responseJson['message'], 'Unauthorized');
+
+        $user->delete();
     }
 
     /** @test */
@@ -59,8 +57,10 @@ class AuthenticationTest extends TestCase
 
         $this->withoutExceptionHandling();
 
-        $user = User::where('email', "andrei@rublev")->first();
-        $userToken = $user->createToken('logout')->accessToken;
+        $user = User::factory()->create();
+        $user->assignRole(Role::findByName('user', 'api'));
+        $userToken = $user->createToken('user')->accessToken;
+
         $response = $this->post('/api/logout', 
             [], 
             ['Authorization' => 'Bearer ' . $userToken,]
@@ -71,5 +71,7 @@ class AuthenticationTest extends TestCase
         $responseJson = $response->json();
         $this->assertEquals($responseJson['response_code'], '200');
         $this->assertEquals($responseJson['message'], 'Success logout');
+
+        $user->delete();
     }
 }

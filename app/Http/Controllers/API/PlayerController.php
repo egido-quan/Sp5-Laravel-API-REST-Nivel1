@@ -89,8 +89,9 @@ class PlayerController extends Controller
         if (!Player::exists()) {
             $ranking = 0;
         } else {
-        $last_player = Player::orderBy('ranking', 'desc')->first();
-        $ranking = $last_player->ranking;        } 
+            $last_player = Player::orderBy('ranking', 'desc')->first();
+            $ranking = $last_player->ranking;
+        } 
 
         $user = new User;
         $user->assignRole('user');
@@ -179,6 +180,8 @@ class PlayerController extends Controller
         $data['message']        = 'Player data modification successful';
         return response()->json($data);
     }
+
+    
 
 
 }
