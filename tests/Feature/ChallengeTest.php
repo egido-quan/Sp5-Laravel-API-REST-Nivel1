@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Challenge;
@@ -20,8 +21,9 @@ class ChallengeTest extends TestCase
    
     $this->withoutExceptionHandling();
 
-    $user = User::where('email', "admin@admin")->first();
-    $userAdminToken = $user->createToken('admin')->accessToken;
+    $userAdmin = User::factory()->create();
+    $userAdmin->assignRole(Role::findByName('admin', 'api'));
+    $userAdminToken = $userAdmin->createToken('admin')->accessToken;
 
     $player1_user_id = 2;
     $player2_user_id = 3;
@@ -62,6 +64,9 @@ class ChallengeTest extends TestCase
     $this->assertEquals($challengeInfo['player1_user_id'], $player1_user_id);
     $this->assertEquals($challengeInfo['player2_user_id'], $player2_user_id);
     $this->assertEquals($challengeInfo['score'], json_encode($score));
+
+    $userAdmin->delete();
+
     }
 
     
@@ -70,8 +75,9 @@ class ChallengeTest extends TestCase
    
     $this->withoutExceptionHandling();
 
-    $user = User::where('email', "admin@admin")->first();
-    $userAdminToken = $user->createToken('admin')->accessToken;
+    $userAdmin = User::factory()->create();
+    $userAdmin->assignRole(Role::findByName('admin', 'api'));
+    $userAdminToken = $userAdmin->createToken('admin')->accessToken;
 
     $player1 = Player::where('ranking',5)->first();
     $player2 = Player::where('ranking',4)->first();
@@ -95,8 +101,6 @@ class ChallengeTest extends TestCase
         'Authorization' => 'Bearer ' . $userAdminToken
     ]);
 
-
-
     $responseJson = $response->json();
     $this->assertEquals($responseJson['response_code'], '200');
     $this->assertEquals($responseJson['message'], 'Challenge registration successful');
@@ -108,21 +112,25 @@ class ChallengeTest extends TestCase
 
     $this->assertEquals(4, $player1->ranking);
     $this->assertEquals(5, $player2->ranking);
+
+    $userAdmin->delete();
+
     }
 
      /** @test */
    public function can_show_player_id_3_matches() { 
    
-    //$this->withoutExceptionHandling();
+    $this->withoutExceptionHandling();
 
-    $user = User::where('email', "jannik@sinner")->first();
-    $userToken = $user->createToken('user')->accessToken;
+    $userClerk = User::factory()->create();
+    $userClerk->assignRole(Role::findByName('admin', 'api'));
+    $userClerkToken = $userClerk->createToken('admin')->accessToken;
 
-    $player1 = Player::where('user_id',3)->first();
+    //$player1 = Player::where('user_id',3)->first();
 
     $response = $this->get('/api/challenge/3',
     [
-        'Authorization' => 'Bearer ' . $userToken
+        'Authorization' => 'Bearer ' . $userClerkToken
     ]);
 
 
@@ -131,6 +139,5 @@ class ChallengeTest extends TestCase
     $this->assertEquals($responseJson['message'], 'Challenge list successful');
 
     }
-
 
 }
