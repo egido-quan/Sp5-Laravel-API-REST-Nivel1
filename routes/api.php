@@ -18,10 +18,10 @@ Route::post('/register_user', [UserController::class, 'register'])->middleware([
 Route::post('/delete_user', [UserController::class, 'delete'])->middleware(['auth:api', 'role:admin']);
 Route::put('/edit_user/{id}', [UserController::class, 'editUser'])->middleware(['auth:api', 'role:admin']);
 
-Route::get('/top5_players', [PlayerController::class, 'top5Players'])->middleware('auth:api');
-Route::get('/player_info/{ranking}', [PlayerController::class, 'playerInfo'])->middleware('auth:api');
+Route::get('/top5_players', [PlayerController::class, 'top5Players'])->middleware(['auth:api', 'role:user|admin']);
+Route::get('/player_info/{ranking}', [PlayerController::class, 'playerInfo'])->middleware(['auth:api', 'role:user|admin']);
 Route::post('/register_player', [PlayerController::class, 'registerPlayer'])->middleware(['auth:api', 'role:admin']);
 Route::put('/edit_player/{id}', [PlayerController::class, 'editPlayer'])->middleware(['auth:api', 'role:admin']);
 
 Route::post('/register_challenge', [ChallengeController::class, 'registerChallenge'])->middleware(['auth:api', 'role:admin']);
-Route::get('/challenge/{id}', [ChallengeController::class, 'show'])->middleware(['auth:api', 'role:user']);
+Route::get('/challenge/{id}', [ChallengeController::class, 'show'])->middleware(['auth:api', 'role:user|admin']);
