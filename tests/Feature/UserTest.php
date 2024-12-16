@@ -110,30 +110,14 @@ class UserTest extends TestCase
         $userAdmin->assignRole(Role::findByName('admin', 'api'));
         $userAdminToken = $userAdmin->createToken('admin')->accessToken;
 
-        do {
-            $fakeName = $this->faker->firstName;
-        } while (strlen($fakeName <5));
-        do {
-            $fakeSurname = $this->faker->lastName;
-        } while (strlen($fakeSurname <5));
-        $fakeEmail = $this->faker->safeEmail;
-        $role = (rand(1,2) == 1) ? 'admin' : 'user';
-
-        $this->post('/api/register_user',
-        [
-            'name' => $fakeName,
-            'surname' => $fakeSurname,
-            'email' => $fakeEmail,
-            'password' => bcrypt('xxx'),
-            'role' => $role
-        ],
-        [
-            'Authorization' => 'Bearer ' . $userAdminToken
-        ]);
+        $userToDelete = User::factory()->create();
 
         $response = $this->post('/api/delete_user',
         [
-            'email' => $fakeEmail,
+            'email' => $userToDelete->email
+        ],
+        [
+            'Authorization' => 'Bearer ' . $userAdminToken
         ]);
 
         $response->assertOk();
