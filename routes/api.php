@@ -22,3 +22,4 @@ Route::put('/edit_player/{id}', [PlayerController::class, 'editPlayer'])->middle
 Route::post('/register_challenge', [ChallengeController::class, 'registerChallenge'])->middleware(['auth:api', 'role:admin']);
 Route::get('/challenge/{id}', [ChallengeController::class, 'show'])->middleware(['auth:api', 'role:user|admin']);
 Route::delete('/delete_challenge/{id}', [ChallengeController::class, 'delete'])->middleware(['auth:api', 'role:admin']);
+Route::post('/auto_score', [ChallengeController::class, 'autoScore'])->middleware(['auth:api', 'role:admin']);

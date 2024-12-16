@@ -81,7 +81,8 @@ class PlayerTest extends TestCase
             $this->assertEquals($playerInfo['briefing'], $fakeBriefing);
     
             $userAdmin->delete();
-            $player->delete();
+            $user = User::find($player->user_id);
+            $user->delete();
         }
 
      /** @test */

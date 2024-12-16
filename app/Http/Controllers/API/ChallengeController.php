@@ -10,6 +10,21 @@ use App\Models\Player;
 
 class ChallengeController extends Controller
 {
+    public function show($player_id) {
+
+        $player = Player::find($player_id);
+        $challengesList = $player
+        ->allChallenges();
+
+        return response()->json([
+            'response_code'     => '200',
+            'status'            => 'success',
+            'message'           => 'Challenge list successful',
+            'challenges'        => $challengesList
+
+        ]);
+    }
+    
     public function registerChallenge (Request $request) {
 
        try {
@@ -29,6 +44,38 @@ class ChallengeController extends Controller
             ], 422);
         }
 
+        return self::addChallenge($request);
+
+    }
+
+    public function autoScore(Request $request) {
+
+        try {
+            $request->validate([
+                'player1_user_id' => 'required|exists:players,user_id|different:player2_user_id',
+                'player2_user_id' => 'required|exists:players,user_id|different:player1_user_id',
+            ]);
+
+        } catch (ValidationException $e) {
+            return response()->json([
+                'response_code' => 422,
+                'status'        => 'error',
+                'message'       => 'Validation failed',
+                'errors'        => $e->errors()
+            ], 422);
+        }
+
+        $score = self::createScore();
+        $request->merge([
+            'score' => $score
+            ]);
+
+        return self::addChallenge($request);
+
+    }
+
+    protected function addChallenge($request) {
+
         $player1 = Player::find($request->player1_user_id);
         $player2 = Player::find($request->player2_user_id);
 
@@ -40,12 +87,12 @@ class ChallengeController extends Controller
                 'status'        => 'error',
                 'message'       => $message
             ]);
-        }
+        }        
 
         $challenge = new Challenge;
 
-        $challenge->player1_user_id = $request->player1_user_id;
-        $challenge->player2_user_id = $request->player2_user_id;
+        $challenge->player1_user_id = $player1->user_id;
+        $challenge->player2_user_id = $player2->user_id;
         $challenge->score = json_encode($request->score);      
 
         $challenge->save();
@@ -62,18 +109,19 @@ class ChallengeController extends Controller
          }
 
         return response()->json([
-            'response_code'     => '200',
-            'status'            => 'success',
-            'message'           => 'Challenge registration successful',
-            'player1_user_id'   => $challenge->player1_user_id,
-            'player1_old_ranking'    => $player1_ranking,
-            'player1_new_ranking'    => $player1->ranking,
-            'player2_user_id'   => $challenge->player2_user_id,
-            'player2_old_ranking'    => $player2_ranking,
-            'player2_new_ranking'    => $player2->ranking,
-            'score'             => $challenge->score,
+            'response_code'         => '200',
+            'status'                => 'success',
+            'message'               => 'Challenge registration successful',
+            'player1_user_id'       => $challenge->player1_user_id,
+            'player1_old_ranking'   => $player1_ranking,
+            'player1_new_ranking'   => $player1->ranking,
+            'player2_user_id'       => $challenge->player2_user_id,
+            'player2_old_ranking'   => $player2_ranking,
+            'player2_new_ranking'   => $player2->ranking,
+            'score'                 => $challenge->score,
 
         ]);
+
 
     }
 
@@ -168,21 +216,42 @@ class ChallengeController extends Controller
         return ($jug1>$jug2) ? 1 : 2;
     }
 
-    public function show($player_id) {
+    protected function createScore() {
 
-        $player = Player::find($player_id);
-        $challengesList = $player
-        ->allChallenges();
+        $p1_set1 = rand(0,7);
+        $p2_set1 = self::createSet($p1_set1);
+        $p1_set2 = rand(0,7);
+        $p2_set2 = self::createSet($p1_set2);
+        if (($p1_set1 - $p2_set1) * ($p1_set2 - $p2_set2) < 0) {
+            $p1_set3 = rand(0,7);
+            $p2_set3 = self::createSet($p1_set3);
+            return $score = [
+                "player1_set1" => $p1_set1,
+                "player2_set1" => $p2_set1,
+                "player1_set2" => $p1_set2,
+                "player2_set2" => $p2_set2,
+                "player1_set3" => $p1_set3,
+                "player2_set3" => $p2_set3
+            ]; } else {        
+            return $score = [
+                "player1_set1" => $p1_set1,
+                "player2_set1" => $p2_set1,
+                "player1_set2" => $p1_set2,
+                "player2_set2" => $p2_set2,
+            ];     
+        }
 
-        return response()->json([
-            'response_code'     => '200',
-            'status'            => 'success',
-            'message'           => 'Challenge list successful',
-            'challenges'        => $challengesList
-
-        ]);
     }
 
-
-   
+    protected function createSet(int $p1_set) {
+        return match(true) {
+            $p1_set == 7 => rand(5,6),
+            $p1_set == 6 => rand(0,4),
+            $p1_set == 5 => 7,
+            $p1_set < 5 => 6
+        };
+        
+    }
+    
+    
 }
