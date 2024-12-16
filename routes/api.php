@@ -8,10 +8,6 @@ use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\PlayerController;
 use App\Http\Controllers\API\ChallengeController;
 
-/*Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:api');*/
-
 Route::post('/login', [AuthenticationController::class, 'login']);
 Route::post('/logout', [AuthenticationController::class, 'logout'])->middleware('auth:api');
 Route::post('/register_user', [UserController::class, 'register'])->middleware(['auth:api', 'role:admin']);
@@ -25,3 +21,4 @@ Route::put('/edit_player/{id}', [PlayerController::class, 'editPlayer'])->middle
 
 Route::post('/register_challenge', [ChallengeController::class, 'registerChallenge'])->middleware(['auth:api', 'role:admin']);
 Route::get('/challenge/{id}', [ChallengeController::class, 'show'])->middleware(['auth:api', 'role:user|admin']);
+Route::delete('/delete_challenge/{id}', [ChallengeController::class, 'delete'])->middleware(['auth:api', 'role:admin']);

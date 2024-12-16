@@ -140,4 +140,50 @@ class ChallengeTest extends TestCase
 
     }
 
+      /** @test */
+      public function new_challenge_can_be_deleted_by_admin_role() {
+
+        $this->withoutExceptionHandling();
+
+        $userAdmin = User::factory()->create();
+        $userAdmin->assignRole(Role::findByName('admin', 'api'));
+        $userAdminToken = $userAdmin->createToken('admin')->accessToken;
+
+        $player1 = Player::factory()->create();
+        $player2 = Player::factory()->create();
+        $score = '{
+            "player1_set1" : 6,
+            "player2_set1" : 3,
+            "player1_set2" : 4,
+            "player2_set2" : 6
+       }';
+
+        $challenge = new Challenge();
+        $challenge->player1_user_id = $player1->user_id;
+        $challenge->player2_user_id = $player2->user_id;
+        $challenge->score = json_encode($score);      
+
+        $challenge->save();
+
+        $response = $this->delete("/api/delete_challenge/{$challenge->id}",
+        [
+            'id' => $challenge->id
+        ],
+        [
+            'Authorization' => 'Bearer ' . $userAdminToken
+        ]);
+
+        $response->assertOk();
+
+        $responseJson = $response->json();
+        $this->assertEquals($responseJson['response_code'], '200');
+        $this->assertEquals($responseJson['message'], 'Challenge deleted');
+
+        $userAdmin->delete();
+        $player1->delete();
+        $player2->delete();
+        $challenge->delete();
+
+    }
+
 }

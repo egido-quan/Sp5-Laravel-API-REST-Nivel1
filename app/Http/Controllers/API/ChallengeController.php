@@ -94,6 +94,31 @@ class ChallengeController extends Controller
 
     }
 
+    public function delete(int $id)
+    {
+
+        $challenge = Challenge::find($id);
+
+        if ($challenge ) {               
+
+            $data = [];
+            $data['response_code']      = '200';
+            $data['status']             = 'success';
+            $data['message']            = 'Challenge deleted';
+            $data['challenge_id']       = $challenge->id;
+
+            $challenge->delete();
+            return response()->json($data);
+
+        } else {
+            $data = [];
+            $data['response_code']  = '404';
+            $data['status']         = 'error';
+            $data['message']        = 'Not existing challenge';
+            return response()->json($data);            
+        }
+    }
+
     protected function isSamePlayer($p1_ranking, $p2_ranking) {
         if ($p1_ranking === $p2_ranking) {
             return true;
