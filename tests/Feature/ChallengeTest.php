@@ -17,7 +17,7 @@ class ChallengeTest extends TestCase
      */
 
 /** @test */
-   public function players_id_2_and_id_3_challenge_can_be_registered() { 
+   public function new_players_challenge_can_be_registered_by_admin() { 
    
     $this->withoutExceptionHandling();
 
@@ -25,8 +25,11 @@ class ChallengeTest extends TestCase
     $userAdmin->assignRole(Role::findByName('admin', 'api'));
     $userAdminToken = $userAdmin->createToken('admin')->accessToken;
 
-    $player1_user_id = 2;
-    $player2_user_id = 3;
+    $player1 = $player = Player::factory()->create();
+    $player2 = $player = Player::factory()->create();
+
+    //$player1_user_id = 2;
+    //$player2_user_id = 3;
     $score = ([
         'player1_set1' => 6,
         'player2_set1' => 3,
@@ -38,15 +41,13 @@ class ChallengeTest extends TestCase
 
     $response = $this->post('/api/register_challenge',
     [
-        'player1_user_id' => $player1_user_id,
-        'player2_user_id' => $player2_user_id,
+        'player1_user_id' => $player1->user_id,
+        'player2_user_id' => $player2->user_id,
         'score' => $score
     ],
     [
         'Authorization' => 'Bearer ' . $userAdminToken
     ]);
-
-
 
     $responseJson = $response->json();
     $this->assertEquals($responseJson['response_code'], '200');
@@ -61,11 +62,16 @@ class ChallengeTest extends TestCase
 
     ];
 
-    $this->assertEquals($challengeInfo['player1_user_id'], $player1_user_id);
-    $this->assertEquals($challengeInfo['player2_user_id'], $player2_user_id);
+    $this->assertEquals($challengeInfo['player1_user_id'], $player1->user_id);
+    $this->assertEquals($challengeInfo['player2_user_id'], $player2->user_id);
     $this->assertEquals($challengeInfo['score'], json_encode($score));
 
     $userAdmin->delete();
+    $user1 = User::find($player1->user_id);
+    $user1->delete();
+    $user2 = User::find($player2->user_id);
+    $user2->delete();
+    $challenge->delete();
 
     }
 
@@ -114,6 +120,7 @@ class ChallengeTest extends TestCase
     $this->assertEquals(5, $player2->ranking);
 
     $userAdmin->delete();
+    $challenge->delete();
 
     }
 
@@ -138,6 +145,8 @@ class ChallengeTest extends TestCase
     $this->assertEquals($responseJson['response_code'], '200');
     $this->assertEquals($responseJson['message'], 'Challenge list successful');
 
+    $userClerk->delete();
+
     }
 
       /** @test */
@@ -154,8 +163,8 @@ class ChallengeTest extends TestCase
         $score = '{
             "player1_set1" : 6,
             "player2_set1" : 3,
-            "player1_set2" : 4,
-            "player2_set2" : 6
+            "player1_set2" : 6,
+            "player2_set2" : 4
        }';
 
         $challenge = new Challenge();
@@ -180,10 +189,57 @@ class ChallengeTest extends TestCase
         $this->assertEquals($responseJson['message'], 'Challenge deleted');
 
         $userAdmin->delete();
-        $player1->delete();
-        $player2->delete();
-        $challenge->delete();
+        $user1 = User::find($player1->user_id);
+        $user1->delete();
+        $user2 = User::find($player2->user_id);
+        $user2->delete();
 
     }
+      /** @test */
+    public function new_players_automatic_challenge_can_be_registered_by_admin() { 
+   
+        $this->withoutExceptionHandling();
+    
+        $userAdmin = User::factory()->create();
+        $userAdmin->assignRole(Role::findByName('admin', 'api'));
+        $userAdminToken = $userAdmin->createToken('admin')->accessToken;
+    
+        $player1 = $player = Player::factory()->create();
+        $player2 = $player = Player::factory()->create();
+    
+        $response = $this->post('/api/auto_score',
+        [
+            'player1_user_id' => $player1->user_id,
+            'player2_user_id' => $player2->user_id,
+        ],
+        [
+            'Authorization' => 'Bearer ' . $userAdminToken
+        ]);    
+    
+        $responseJson = $response->json();
+        $this->assertEquals($responseJson['response_code'], '200');
+        $this->assertEquals($responseJson['message'], 'Challenge registration successful');
+    
+        $challenge = Challenge::all()->last();
+    
+        $challengeInfo = [
+            'player1_user_id' => $challenge['player1_user_id'],
+            'player2_user_id' => $challenge['player2_user_id'],
+            'score' => json_decode($challenge['score'], true),
+    
+        ];
+    
+        $this->assertEquals($challengeInfo['player1_user_id'], $player1->user_id);
+        $this->assertEquals($challengeInfo['player2_user_id'], $player2->user_id);
+        $this->assertArrayHasKey('player1_set1', $challengeInfo['score']);
+        $this->assertArrayHasKey('player1_set2', $challengeInfo['score']);
+    
+        $userAdmin->delete();
+        $user1 = User::find($player1->user_id);
+        $user1->delete();
+        $user2 = User::find($player2->user_id);
+        $user2->delete();
+        $challenge->delete();    
+        }
 
 }
