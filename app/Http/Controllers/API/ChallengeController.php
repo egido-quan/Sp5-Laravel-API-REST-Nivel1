@@ -32,24 +32,7 @@ class ChallengeController extends Controller
         $player1 = Player::find($request->player1_user_id);
         $player2 = Player::find($request->player2_user_id);
 
-        $message = "OK";
-
-        if (self::isSamePlayer($player1->ranking, $player2->ranking))
-            $message = "A player cannot challenge herself/himself";
-
-        elseif (!self::isRankgingGapOk($player1->ranking, $player2->ranking))
-            $message =  "Ranking gap between players must be 3 or lower";
-
-        elseif (!self::isSetScoreOK($request->score['player1_set1'], $request->score['player2_set1']))
-            $message = "1st set score is wrong";
-
-        elseif (!self::isSetScoreOK($request->score['player1_set2'], $request->score['player2_set2']))
-            $message = "2nd set score is wrong";
-    
-        elseif (isset($request->score['player1_set3']) || isset($request->score['player2_set3'])) {
-            if (!self::isSetScoreOK($request->score['player1_set3'], $request->score['player2_set3']))
-                $message = "3rd set score is wrong";
-        }
+        $message = self::scoreValidation($request);
 
         if ($message != "OK") {
             return  response()->json([
@@ -119,6 +102,31 @@ class ChallengeController extends Controller
         }
     }
 
+    protected function scoreValidation($request):string {
+
+        $player1 = Player::find($request->player1_user_id);
+        $player2 = Player::find($request->player2_user_id);
+
+        if (self::isSamePlayer($player1->ranking, $player2->ranking))
+            return "A player cannot challenge herself/himself";
+
+        elseif (!self::isRankgingGapOk($player1->ranking, $player2->ranking))
+            return "Ranking gap between players must be 3 or lower";
+
+        elseif (!self::isSetScoreOK($request->score['player1_set1'], $request->score['player2_set1']))
+            return "1st set score is wrong";
+
+        elseif (!self::isSetScoreOK($request->score['player1_set2'], $request->score['player2_set2']))
+            return "2nd set score is wrong";
+    
+        elseif (isset($request->score['player1_set3']) || isset($request->score['player2_set3'])) {
+            if (!self::isSetScoreOK($request->score['player1_set3'], $request->score['player2_set3']))
+            return "3rd set score is wrong";
+        } 
+
+        return "OK";
+    }
+
     protected function isSamePlayer($p1_ranking, $p2_ranking) {
         if ($p1_ranking === $p2_ranking) {
             return true;
@@ -165,9 +173,6 @@ class ChallengeController extends Controller
         $player = Player::find($player_id);
         $challengesList = $player
         ->allChallenges();
-        //->with('challenges_1') //Hay que comprobar si el jugador está en el campo player_1 o player_2
-        //->with('challenges_2')
-        //->first();
 
         return response()->json([
             'response_code'     => '200',
