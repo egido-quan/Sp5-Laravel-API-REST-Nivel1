@@ -20,3 +20,7 @@ In case of any kind of conflict, the tournament referee will take the decision. 
 - The challenger player can challenge any other player with a ranking up to 3 positions over the challenger
 - Matches (challenges) will be played to 3 sets, having tie break in all of them            
 - If the challenger wins, both players will swap ranking positions
+
+## NOTES
+
+In this project, we have three kind of entitiies: users (can have 'admin' or 'user' role), players (always have 'user' role) and challenges (= tennis matches). Some endpoints require 'admin' role, some require just 'user' role and one (login) has no role requirement.
