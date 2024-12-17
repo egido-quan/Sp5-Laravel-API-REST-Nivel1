@@ -35,65 +35,66 @@ get('/player_info/{ranking}')
 get('/challenge/{id}')  
 
 
-- 'admin' role required
-post('/register_user'): 
-    {
-    "name": "Jason", 
-    "surname": "Donovan",
-    "email": "jason@sindonovanner",
-    "password": "xxxxxxxx",
+- 'admin' role required  
+post('/register_user'):   
+    {  
+    "name": "Jason",   
+    "surname": "Donovan",  
+    "email": "jason@sindonovanner",  
+    "password": "xxxxxxxx",  
     "role": "admin"
-    }
+    }  
 
-post('/delete_user')
+post('/delete_user')  
     {
-    "email": "jason@sindonovanner",
-    }
+    "email": "jason@sindonovanner",  
+    }  
 
-put('/edit_user/{id}') (write only fields no be changed)
-    {
-    "name": "Manolo", 
-    "email": "manolo@sindonovanner",
-    "role": "user"
-    }
-post('/register_player')
-    {
-    "name" : "Johny",
-    "surname" : "Mac",
-    "email" : "johny@mac",
-    "password" : "xxxxxxx",
-    "height" : 181,
-    "playing_hand" : "left",
-    "backhand_style" : "one hand",
-    "briefing" : "You cannot be serious !!"
-    }
+put('/edit_user/{id}') (write only fields no be changed)  
+    {  
+    "name": "Manolo",   
+    "email": "manolo@sindonovanner",  
+    "role": "user"  
+    }  
+post('/register_player')  
+    {  
+    "name" : "Johny",  
+    "surname" : "Mac",  
+    "email" : "johny@mac",  
+    "password" : "xxxxxxx",  
+    "height" : 181,  
+    "playing_hand" : "left",  
+    "backhand_style" : "one hand",  
+    "briefing" : "You cannot be serious !!"  
+    }  
 
-put('/edit_player/{id}') (write only fields no be changed)
-    {
-    "surname" : "Macenroe",
-    "briefing" : "That ball was in !!"
-    }
+put('/edit_player/{id}') (write only fields no be changed)  
+    {  
+    "surname" : "Macenroe",  
+    "briefing" : "That ball was in !!"  
+    }  
 
-post('/register_challenge')
-{
-"player1_user_id" : 4,
-"player2_user_id" : 5,
-"score" : 
-    {
-         "player1_set1" : 6,
-        "player2_set1" : 3,
-        "player1_set2" : 4,
-        "player2_set2" : 6,
-        "player1_set3" : 6,
-        "player2_set3" : 2
-    }
+post('/register_challenge')  
+{  
+"player1_user_id" : 4,  
+"player2_user_id" : 5,  
+"score" :   
+    {  
+         "player1_set1" : 6,  
+        "player2_set1" : 3,  
+        "player1_set2" : 4,  
+        "player2_set2" : 6,  
+        "player1_set3" : 6,  
+        "player2_set3" : 2  
+    }  
+}  
+delete('/delete_challenge/{id}')  
+post('/auto_score')  
+    {  
+    "player1_user_id" : 4,  
+    "player2_user_id" : 5,  
+    }  
 
-}
-delete('/delete_challenge/{id}')
-post('/auto_score')
-    {
-    "player1_user_id" : 4,
-    "player2_user_id" : 5,
-    }
+    
 
 
