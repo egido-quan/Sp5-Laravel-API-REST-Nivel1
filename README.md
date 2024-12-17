@@ -28,11 +28,11 @@ In this project, we have three kind of entities: users (can have 'admin' or 'use
 - No role required:
 post('/login'): requires email and password
 
-- 'user' or 'admin' roles required
-post('/logout'): requires being logged in
-get('/top5_players')
-get('/player_info/{ranking}')
-get('/challenge/{id}')
+- 'user' or 'admin' roles required  
+post('/logout'): requires being logged in  
+get('/top5_players')  
+get('/player_info/{ranking}')  
+get('/challenge/{id}')  
 
 
 - 'admin' role required
