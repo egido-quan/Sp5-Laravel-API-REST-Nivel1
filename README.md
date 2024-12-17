@@ -28,14 +28,14 @@ In this project, we have three kind of entities: users (can have 'admin' or 'use
 ### No role required:
 post('/login'): requires email and password
 
-### 'user' or 'admin' roles required  
+### 'user' or 'admin' roles required:  
 **post('/logout'):** requires being logged in  
 **get('/top5_players')**  
 **get('/player_info/{ranking}')**  
 **get('/challenge/{id}')**  
 
 
-### 'admin' role required  
+### 'admin' role required:  
 **post('/register_user'):**    
     {  
     "name": "Jason",   
@@ -109,11 +109,11 @@ tennis_challenge_api
 ## CONTRIBUTIONS
 Contributions are welcome:  
 
-Fork the repository  
-Create a new branch   git checkout -b feature/NewFeature  
-Write your code and commit it:   git commit -m 'New feature'  
-Push it:   git push origin feature/NewFeature  
-Perform a pull request  
+- Fork the repository  
+- Create a new branch   git checkout -b feature/NewFeature  
+- Write your code and commit it:   git commit -m 'New feature'  
+- Push it:   git push origin feature/NewFeature  
+- Perform a pull request  
 
 
 
