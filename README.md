@@ -25,18 +25,18 @@ In case of any kind of conflict, the tournament referee will take the decision. 
 
 In this project, we have three kind of entities: users (can have 'admin' or 'user' role), players (always have 'user' role) and challenges (= tennis matches). Some endpoints require 'admin' role, some require just 'user' role and one (login) has no role requirement. These are the endpoints and example of expected body in postman:
 
-- No role required:
+### No role required:
 post('/login'): requires email and password
 
-- 'user' or 'admin' roles required  
-post('/logout'): requires being logged in  
-get('/top5_players')  
-get('/player_info/{ranking}')  
-get('/challenge/{id}')  
+### 'user' or 'admin' roles required  
+**post('/logout'):** requires being logged in  
+**get('/top5_players')**  
+**get('/player_info/{ranking}')**  
+**get('/challenge/{id}')**  
 
 
-- 'admin' role required  
-post('/register_user'):   
+### 'admin' role required  
+**post('/register_user'):**    
     {  
     "name": "Jason",   
     "surname": "Donovan",  
@@ -44,19 +44,17 @@ post('/register_user'):
     "password": "xxxxxxxx",  
     "role": "admin"
     }  
-
-post('/delete_user')  
+**post('/delete_user')**  
     {
     "email": "jason@sindonovanner",  
     }  
-
-put('/edit_user/{id}') (write only fields no be changed)  
+**put('/edit_user/{id}') (write only fields no be changed)**    
     {  
     "name": "Manolo",   
     "email": "manolo@sindonovanner",  
     "role": "user"  
     }  
-post('/register_player')  
+**post('/register_player')**  
     {  
     "name" : "Johny",  
     "surname" : "Mac",  
@@ -67,14 +65,12 @@ post('/register_player')
     "backhand_style" : "one hand",  
     "briefing" : "You cannot be serious !!"  
     }  
-
-put('/edit_player/{id}') (write only fields no be changed)  
+**put('/edit_player/{id}') (write only fields no be changed)**    
     {  
     "surname" : "Macenroe",  
     "briefing" : "That ball was in !!"  
     }  
-
-post('/register_challenge')  
+**post('/register_challenge')**   
 {  
 "player1_user_id" : 4,  
 "player2_user_id" : 5,  
@@ -88,8 +84,8 @@ post('/register_challenge')
         "player2_set3" : 2  
     }  
 }  
-delete('/delete_challenge/{id}')  
-post('/auto_score')  
+**delete('/delete_challenge/{id}')**  
+**post('/auto_score')**  
     {  
     "player1_user_id" : 4,  
     "player2_user_id" : 5,  
@@ -111,13 +107,13 @@ https://github.com/egido-quan/Sp5-Laravel-API-REST-Nivel1.git
 tennis_challenge_api  
 
 ## CONTRIBUTIONS
-Contributions are welcome:
+Contributions are welcome:  
 
-Fork the repository
-Create a new branch   git checkout -b feature/NewFeature
-Write your code and commit it:   git commit -m 'New feature'
-Push it:   git push origin feature/NewFeature
-Perform a pull request
+Fork the repository  
+Create a new branch   git checkout -b feature/NewFeature  
+Write your code and commit it:   git commit -m 'New feature'  
+Push it:   git push origin feature/NewFeature  
+Perform a pull request  
 
 
 
