@@ -94,7 +94,32 @@ post('/auto_score')
     "player1_user_id" : 4,  
     "player2_user_id" : 5,  
     }  
+  
+  
+## SOFTWARE USED
 
-    
+- Laravel 11.34.2
+- MariaDB: mysql  Ver 15.1 Distrib 10.4.28-MariaDB, for osx10.10
+- Passprt v12.3.1
+- Spatie 6.10.1
+
+## INSTALLATION
+- Download the project from:  
+https://github.com/egido-quan/Sp5-Laravel-API-REST-Nivel1.git  
+- Locate it under /htdocs  
+- Create a MariaDB/MySQL database called  
+tennis_challenge_api  
+
+## CONTRIBUTIONS
+Contributions are welcome:
+
+Fork the repository
+Create a new branch   git checkout -b feature/NewFeature
+Write your code and commit it:   git commit -m 'New feature'
+Push it:   git push origin feature/NewFeature
+Perform a pull request
+
+
+
 
 
