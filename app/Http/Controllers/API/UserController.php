@@ -128,37 +128,6 @@ class UserController extends Controller
         $data['users_list']     = $users;
         return response()->json($data);
         
-/*
-        return view('players.index', ['players' => $players]);
-
-        $resultado = [];
-
-            foreach ($listaTareas as $dato) {
-                $j = 0;
-                if ($busqueda["id"] == "" || $busqueda["id"] == $dato["id"]) {
-                    $j ++;
-                }
-                if ($busqueda["tarea"] == "" || str_contains(self::arreglar($dato["tarea"]), self::arreglar($busqueda["tarea"]))) {
-                    $j ++;
-                }
-                if ($busqueda["responsable"] == "" ||
-                    str_contains(self::arreglar($dato["responsable"]), self::arreglar($busqueda["responsable"]))) {
-                    $j ++;
-                }
-                if ($busqueda["estado"] == "" || $busqueda["estado"] == $dato["estado"]) {
-                    $j ++;
-                }
-                if ($busqueda["inicio"] == "" || $busqueda["inicio"] == $dato["inicio"]) {
-                    $j ++;
-                }
-                if ($busqueda["fin"] == "" || $busqueda["fin"] == $dato["fin"]) {
-                    $j ++;
-                }
-            
-                if ($j == 6) {
-                    $resultado [] = $dato;
-                }   
-            }    */ 
     }
 
 }
