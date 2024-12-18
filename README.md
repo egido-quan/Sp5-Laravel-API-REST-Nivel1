@@ -26,16 +26,25 @@ In case of any kind of conflict, the tournament referee will take the decision. 
 In this project, we have three kind of entities: users (can have 'admin' or 'user' role), players (always have 'user' role) and challenges (= tennis matches). Some endpoints require 'admin' role, some require just 'user' role and one (login) has no role requirement. These are the endpoints and example of expected body in postman:
 
 ### No role required:
-post('/login'): requires email and password
+post('/login'):
+{
+"email" : "admin@admin",
+"password" : "admin"
+}
 
 ### 'user' or 'admin' roles required:  
+
 **post('/logout'):** requires being logged in  
+
 **get('/top5_players')**  
+
 **get('/player_info/{ranking}')**  
+
 **get('/challenge/{id}')**  
 
 
 ### 'admin' role required:  
+
 **post('/register_user'):**    
     {  
     "name": "Jason",   
@@ -44,16 +53,19 @@ post('/login'): requires email and password
     "password": "xxxxxxxx",  
     "role": "admin"
     }  
+
 **post('/delete_user')**  
     {
     "email": "jason@sindonovanner",  
     }  
-**put('/edit_user/{id}') (write only fields no be changed)**    
+
+**put('/edit_user/{id}') (write only fields to be changed)**    
     {  
     "name": "Manolo",   
     "email": "manolo@sindonovanner",  
     "role": "user"  
     }  
+
 **post('/register_player')**  
     {  
     "name" : "Johny",  
@@ -65,26 +77,30 @@ post('/login'): requires email and password
     "backhand_style" : "one hand",  
     "briefing" : "You cannot be serious !!"  
     }  
+
 **put('/edit_player/{id}') (write only fields no be changed)**    
     {  
     "surname" : "Macenroe",  
     "briefing" : "That ball was in !!"  
     }  
+
 **post('/register_challenge')**   
-{  
-"player1_user_id" : 4,  
-"player2_user_id" : 5,  
-"score" :   
     {  
-         "player1_set1" : 6,  
-        "player2_set1" : 3,  
-        "player1_set2" : 4,  
-        "player2_set2" : 6,  
-        "player1_set3" : 6,  
-        "player2_set3" : 2  
+    "player1_user_id" : 4,  
+    "player2_user_id" : 5,  
+    "score" :   
+        {  
+            "player1_set1" : 6,  
+            "player2_set1" : 3,  
+            "player1_set2" : 4,  
+            "player2_set2" : 6,  
+            "player1_set3" : 6,  
+            "player2_set3" : 2  
+        }  
     }  
-}  
+
 **delete('/delete_challenge/{id}')**  
+
 **post('/auto_score')**  
     {  
     "player1_user_id" : 4,  

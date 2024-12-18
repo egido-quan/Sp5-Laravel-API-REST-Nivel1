@@ -252,4 +252,37 @@ class PlayerTest extends TestCase
         $user = User::where('id', $player->user_id)->first();
         $user->delete();
     }
+     /** @test */
+    public function existing_player_can_be_found_by_user_role() {
+
+        $this->withoutExceptionHandling();
+
+        $userClerk = User::factory()->create();
+        $userClerk->assignRole(Role::findByName('user', 'api'));
+        $userClerkToken = $userClerk->createToken('user')->accessToken;
+
+        $player = Player::factory()->create();
+        $user = User::where('id', $player->user_id)->first();
+
+        $response = $this->get("/api/search_player/",
+        [
+            'name'          => $user->name,
+            'email'         => $user->email,
+            'playing_hand'  => $player->playing_hand,
+            'briefing'      => $player->briefing,
+        ],
+        [
+            'Authorization' => 'Bearer ' . $userClerkToken
+        ]);
+
+        $response->assertOk();    
+        $responseJson = $response->json();
+        $this->assertEquals($responseJson['response_code'], '200');
+        $this->assertEquals($responseJson['message'], 'Player search successful');
+
+        $userClerk->delete();
+        $user->delete();
+        $player->delete();
+
+    }
 }

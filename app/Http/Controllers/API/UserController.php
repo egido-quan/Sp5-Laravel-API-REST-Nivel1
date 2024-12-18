@@ -92,20 +92,12 @@ class UserController extends Controller
             ], 422);
         }
 
-
-
         $userToEdit = User::find($id);
         $userToEdit->name = ($request->name == "") ? $userToEdit->name : $request->name;
         $userToEdit->surname = ($request->surname == "") ? $userToEdit->surname : $request->surname;
         $userToEdit->email = ($request->email == "") ? $userToEdit->email : $request->email;
         $userToEdit->password = ($request->password == "") ? $userToEdit->password : Hash::make($request->password);
         if (!$request->role == "") $userToEdit->assignRole($request->role);
-
-        //$userToEdit->name       = $request->name;
-        //$userToEdit->surname    = $request->surname;
-        //$userToEdit->email      = $request->email;
-        //$userToEdit->password   = Hash::make($request->password);
-        //$userToEdit->assignRole($request->role);
 
         $userToEdit->save();
 
@@ -114,9 +106,59 @@ class UserController extends Controller
         $data['status']         = 'success';
         $data['message']        = 'User data modification successful';
         return response()->json($data);
+    }
 
+    public function searchUser(Request $request) {
 
+        $users = User::
+        where('name', 'like', '%' . $request->name . '%')
+        ->where('surname', 'like', '%' . $request->surname . '%')
+        ->where('email', 'like', '%' . $request->email . '%')
+        ->get();
 
+        if (count($users) == 0) {
+            $message = "There is no user matching the search";
+        } else {
+            $message = "User search successful";
+        }
+
+        $data['response_code']  = '200';
+        $data['status']         = 'success';
+        $data['message']        = $message;
+        $data['users_list']     = $users;
+        return response()->json($data);
+        
+/*
+        return view('players.index', ['players' => $players]);
+
+        $resultado = [];
+
+            foreach ($listaTareas as $dato) {
+                $j = 0;
+                if ($busqueda["id"] == "" || $busqueda["id"] == $dato["id"]) {
+                    $j ++;
+                }
+                if ($busqueda["tarea"] == "" || str_contains(self::arreglar($dato["tarea"]), self::arreglar($busqueda["tarea"]))) {
+                    $j ++;
+                }
+                if ($busqueda["responsable"] == "" ||
+                    str_contains(self::arreglar($dato["responsable"]), self::arreglar($busqueda["responsable"]))) {
+                    $j ++;
+                }
+                if ($busqueda["estado"] == "" || $busqueda["estado"] == $dato["estado"]) {
+                    $j ++;
+                }
+                if ($busqueda["inicio"] == "" || $busqueda["inicio"] == $dato["inicio"]) {
+                    $j ++;
+                }
+                if ($busqueda["fin"] == "" || $busqueda["fin"] == $dato["fin"]) {
+                    $j ++;
+                }
+            
+                if ($j == 6) {
+                    $resultado [] = $dato;
+                }   
+            }    */ 
     }
 
 }

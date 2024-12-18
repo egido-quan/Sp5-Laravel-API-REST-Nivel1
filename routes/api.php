@@ -13,6 +13,7 @@ Route::post('/logout', [AuthenticationController::class, 'logout'])->middleware(
 Route::post('/register_user', [UserController::class, 'register'])->middleware(['auth:api', 'role:admin']);
 Route::post('/delete_user', [UserController::class, 'delete'])->middleware(['auth:api', 'role:admin']);
 Route::put('/edit_user/{id}', [UserController::class, 'editUser'])->middleware(['auth:api', 'role:admin']);
+Route::post('/search_user', [UserController::class, 'searchUser']);
 
 Route::get('/top5_players', [PlayerController::class, 'top5Players'])->middleware(['auth:api', 'role:user|admin']);
 Route::get('/player_info/{ranking}', [PlayerController::class, 'playerInfo'])->middleware(['auth:api', 'role:user|admin']);

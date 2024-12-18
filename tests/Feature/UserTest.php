@@ -222,5 +222,48 @@ class UserTest extends TestCase
          $userAdmin->delete();
          $user->delete();
         }
+
+           /** @test */
+    public function existing_user_can_be_found_by_user_role() {
+
+        $this->withoutExceptionHandling();
+
+        $userClerk = User::factory()->create();
+        $userClerk->assignRole(Role::findByName('user', 'api'));
+        $userClerkToken = $userClerk->createToken('user')->accessToken;
+
+        $user = User::factory()->create();
+
+        $response = $this->post("/api/search_user/",
+        [
+            'email'         => $user->email,
+        ],
+        [
+            'Authorization' => 'Bearer ' . $userClerkToken
+        ]);
+
+        $foundUser = User::where('email', $user->email)->first();;
+        $response->assertOk();    
+        $responseJson = $response->json();
+        $this->assertEquals($responseJson['response_code'], '200');
+        $this->assertEquals($responseJson['message'], 'User search successful');
+        $this->assertEquals($foundUser->email, $responseJson['users_list'][0]['email']);
+
+        $response = $this->post("/api/search_user/",
+        [
+            'name'         => $user->email,
+        ],
+        [
+            'Authorization' => 'Bearer ' . $userClerkToken
+        ]);
+
+        $response->assertOk();    
+        $responseJson = $response->json();
+        $this->assertEquals($responseJson['response_code'], '200');
+        $this->assertEquals($responseJson['message'], 'There is no user matching the search');
+
+        $userClerk->delete();
+        $user->delete();
+    }
      
 }
